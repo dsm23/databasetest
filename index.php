@@ -66,10 +66,17 @@ function disTable($conn) {
     <!-- Custom styles for this theme -->
     <link href="css/agency.min.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="lib/jquery/jquery.min.js"></script>    
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
     <!-- Temporary navbar container fix until Bootstrap 4 is patched -->
     <style>
     .navbar-toggler {
         z-index: 1;
+    }
+    .ui-autocomplete{
+        transform: translate(0.85em,13.5em);
     }
     
     @media (max-width: 576px) {
@@ -89,7 +96,7 @@ function disTable($conn) {
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu <i class="fa fa-bars"></i>
             </button>
-            <a class="navbar-brand page-scroll" href="#page-top">Start Bootstrap</a>
+            <a class="navbar-brand page-scroll" href="#page-top">DatabaseTest</a>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
@@ -118,15 +125,15 @@ function disTable($conn) {
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Enter name *" id="name" required data-validation-required-message="Please enter the name.">
+                                    <input type="text" class="form-control" placeholder="Enter name" id="name" required data-validation-required-message="Please enter the name.">
                                     <p class="help-block text-danger"></p>
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" class="form-control" placeholder="Enter email *" id="email" required data-validation-required-message="Please enter the email address.">
+                                    <input type="email" class="form-control" placeholder="Enter email" id="email" required data-validation-required-message="Please enter the email address.">
                                     <p class="help-block text-danger"></p>
                                 </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Enter school *" id="school" required data-validation-required-message="Please enter the school." autocomplete="off">
+                                <div class="form-group ui-front">
+                                    <input type="text" class="form-control" placeholder="Enter school" id="school" required data-validation-required-message="Please enter the school." autocomplete="off">                                                                        
                                     <p class="help-block text-danger"></p>
                                 </div>
                             </div>
@@ -166,7 +173,6 @@ function disTable($conn) {
     </section>    
 
     <!-- Bootstrap core JavaScript -->
-    <script src="lib/jquery/jquery.min.js"></script>
     <script src="lib/tether/tether.min.js"></script>
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
 
@@ -179,6 +185,35 @@ function disTable($conn) {
 
     <!-- Cusotm JavaScript for this theme -->
     <script src="js/agency.min.js"></script>
+    <script>
+    $(document).ready(function() {
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "davidsch.txt", false);
+    xhttp.send();
+    
+    var str = xhttp.responseText;
+    console.log(typeof str);
+
+    console.log(xhttp.status);
+    console.log(str[0]);
+    
+    var school = str.split(",");
+    console.log(school);
+    
+    $( function() {    
+    $( "#school" ).autocomplete({        
+      source: function( request, response ) {
+          var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
+          response( $.grep( school, function( item ){
+              return matcher.test( item );
+          }) );
+      }
+    });
+  });
+
+    });
+    </script>
     <?php $conn->close();?>
 </body>
 
