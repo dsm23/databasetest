@@ -11,10 +11,9 @@ $(function() {
             // get values from FORM
             var name = $("#name").val();
             var email = $("#email").val();
-            var school = $("#school").val();
-            var firstName = name; // For Success/Failure Message
+            var school = $("#school").val();            
             $.ajax({
-                url: "/testd/contact_me.php",
+                url: "./testd/contact_me.php",
                 type: "POST",
                 data: {
                     name: name,
@@ -57,7 +56,6 @@ $(function() {
         $(this).tab("show");
     });
 });
-
 
 /*When clicking on Full hide fail/success boxes */
 $('#name').focus(function() {

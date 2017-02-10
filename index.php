@@ -1,23 +1,14 @@
 <?php
 
 $servername = "localhost";
-$username = "dsmurdoc_david";
+$username = "david";
 $password = "password";
 
 $conn = new mysqli($servername, $username, $password);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 
 $sqldat = "CREATE DATABASE phptest;";
 
-if ($conn->query($sqldat) === TRUE) {
-    echo "Database phptest created successfully";
-} else {
-    echo "Error creating database: " . $conn->error;
-}
-
+$conn->query($sqldat);
 $conn->close();
 
 $dbname = "phptest";
@@ -28,36 +19,25 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
-} 
-echo "Connected successfully";
+}
 
-
-$sqlinsert = "CREATE TABLE fulltest (
+$sqltableinsert = "CREATE TABLE fulltest (
 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-Name VARCHAR(30) NOT NULL,
-Email VARCHAR(50),
-School VARCHAR(50),
+name VARCHAR(30) NOT NULL,
+email VARCHAR(50),
+school VARCHAR(50),
 reg_date TIMESTAMP
 )";
 
-if ($conn->query($sqlinsert) === TRUE) {
-    echo "Table fulltest created successfully";
-} else {
-    echo "Error creating table: " . $conn->error;
-}
+$conn->query($sqltableinsert);
 
-$sqlselect = "SELECT id,Name,Email,School FROM fulltest";
-$result = $conn->query($sqlselect);
+function disTable($conn) {
+    $sqlselect = "SELECT id,name,email,school FROM fulltest";
+    $result = $conn->query($sqlselect);
 
-if ($result->num_rows > 0) {
-    // output data of each row
-    $row = $result->fetch_assoc();
-    
-    for ($i = 0; $i < count($result); $i++) {
-       echo "id: " . $row["id"]. " - Name: " . $row["Name"]. " - Email: " . $row["Email"]. " - School: " . $row["School"];
+    while($row = $result->fetch_assoc()) {
+        echo "<tr><td>" . $row["id"]. "</td><td>" . $row["name"]. "</td><td>" . $row["email"]. "</td><td>" . $row["school"] . "</td></tr>";
     }
-} else {
-    echo "0 results";
 }
 
 ?>
@@ -165,6 +145,7 @@ if ($result->num_rows > 0) {
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
+                <p class="text-center text-muted">You may need to refresh (F5)</p>
                     <table class="table table-striped table-hover table-bordered">
   <thead class="thead-inverse">
     <tr>
@@ -176,56 +157,13 @@ if ($result->num_rows > 0) {
   </thead>
 
   <tbody> 
-  <?php
-    for ($i = 0; $i < count($result); $i++) {
-       echo "<tr><td>" . $row["id"]. "</td><td>" . $row["Name"]. "</td><td>" . $row["Email"]. "</td><td>" . $row["School"] . "</td></tr>";
-    } 
-    ?>
-    <tr>
-      <td>2</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-    </tr>
-    <tr>
-      <td>5</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-    </tr>
-    <tr>
-      <td>6</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-    </tr>
-    <tr>
-      <td>7</td>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-    </tr>
+  <?php disTable($conn);?>
   </tbody>
 </table> 
                 </div>
             </div>
         </div>
-    </section>
-
-    <?php $conn->close();?>
-    
+    </section>    
 
     <!-- Bootstrap core JavaScript -->
     <script src="lib/jquery/jquery.min.js"></script>
@@ -241,7 +179,7 @@ if ($result->num_rows > 0) {
 
     <!-- Cusotm JavaScript for this theme -->
     <script src="js/agency.min.js"></script>
-
+    <?php $conn->close();?>
 </body>
 
 </html>
